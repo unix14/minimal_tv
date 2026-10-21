@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dialog_width"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:text="@string/settings_title"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/accent_blue"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:text="@string/settings_language"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+
+            <Button
+                android:id="@+id/btn_lang_en"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/bg_button_selector"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp"
+                android:text="@string/settings_language_en"
+                android:focusable="true" />
+
+            <Button
+                android:id="@+id/btn_lang_he"
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/bg_button_selector"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp"
+                android:text="@string/settings_language_he"
+                android:focusable="true" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/accent_blue"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:text="@string/settings_accessibility"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            android:text="@string/settings_accessibility_desc"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tv_accessibility_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/accent_gold"
+            android:textSize="13sp"
+            android:text="@string/settings_accessibility_disabled_status"
+            android:layout_marginBottom="10dp" />
+
+        <Button
+            android:id="@+id/btn_open_accessibility"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_button_selector"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:text="@string/settings_accessibility_enable"
+            android:focusable="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/accent_blue"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:text="@string/settings_channels"
+            android:layout_marginBottom="6dp" />
+
+        <LinearLayout
+            android:id="@+id/ll_channels_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp" />
+
+        <Button
+            android:id="@+id/btn_open_adb_guide"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_button_selector"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:text="@string/settings_adb_guide"
+            android:focusable="true" />
+
+        <Button
+            android:id="@+id/btn_close_settings"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_button_selector"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:text="@string/btn_done"
+            android:focusable="true" />
+
+    </LinearLayout>
+</ScrollView>

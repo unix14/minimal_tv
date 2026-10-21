@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tv_overscan_horizontal">48dp</dimen>
+    <dimen name="tv_overscan_vertical">28dp</dimen>
+    <dimen name="app_card_width">176dp</dimen>
+    <dimen name="app_card_height">104dp</dimen>
+    <dimen name="app_card_corner_radius">10dp</dimen>
+    <dimen name="program_card_width">200dp</dimen>
+    <dimen name="program_card_height">112dp</dimen>
+    <dimen name="top_bar_height">64dp</dimen>
+    <dimen name="top_bar_icon_size">40dp</dimen>
+    <dimen name="dialog_width">520dp</dimen>
+</resources>

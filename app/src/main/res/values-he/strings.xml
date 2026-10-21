@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MinimalTV</string>
+    <string name="row_favorites">מועדפים</string>
+    <string name="row_apps">כל האפליקציות</string>
+    <string name="action_settings">הגדרות מערכת</string>
+    <string name="action_launcher_settings">הגדרות לאנצ\'ר</string>
+    <string name="action_move_left">הזז שמאלה</string>
+    <string name="action_move_right">הזז ימינה</string>
+    <string name="action_pin_favorite">הוסף למועדפים</string>
+    <string name="action_unpin_favorite">הסר ממועדפים</string>
+    <string name="action_app_info">פרטי אפליקציה</string>
+    <string name="action_uninstall">הסר התקנה</string>
+    <string name="action_hide">הסתר אפליקציה</string>
+    <string name="action_unhide">בטל הסתרה</string>
+    <string name="settings_title">הגדרות MinimalTV</string>
+    <string name="settings_language">שפה / Language</string>
+    <string name="settings_language_en">English</string>
+    <string name="settings_language_he">עברית</string>
+    <string name="settings_channels">ערוצי המלצות</string>
+    <string name="settings_channels_empty">לא נמצאו ערוצי המלצות מאפליקציות מותקנות.</string>
+    <string name="settings_accessibility">יירוט כפתור הבית (שיאומי)</string>
+    <string name="settings_accessibility_desc">הפעל שירות נגישות כדי ליירט לחיצה על כפתור הבית ולפתוח את MinimalTV במקום PatchWall.</string>
+    <string name="settings_accessibility_enable">פתח הגדרות נגישות</string>
+    <string name="settings_accessibility_enabled_status">סטטוס: פעיל ומיירט</string>
+    <string name="settings_accessibility_disabled_status">סטטוס: כבוי (לחץ להגדרה)</string>
+    <string name="settings_adb_guide">מדריך נטרול PatchWall (ADB)</string>
+    <string name="accessibility_service_description">שירות נגישות של MinimalTV ליירוט כפתור הבית כך שלחיצה בשלט תפתח תמיד את לאנצ\'ר MinimalTV במקום שיאומי PatchWall.</string>
+    <string name="btn_close">סגור</string>
+    <string name="btn_done">סיום</string>
+    <string name="adb_guide_title">נטרול PatchWall באמצעות ADB</string>
+    <string name="adb_guide_content">כדי למנוע מ-Xiaomi PatchWall להשתלט על כפתור הבית, הרץ פקודות אלו מהמחשב:\n\n1. התחברות לטלוויזיה:\nadb connect %1$s:5555\n\n2. נטרול לאנצ\'ר שיאומי:\nadb shell pm disable-user --user 0 com.mitv.tvhome\n\n3. (רשות) נטרול שירותי פרסומות שיאומי:\nadb shell pm disable-user --user 0 com.xiaomi.mitv.tvpush.tvpushservice\n\nלהחזרה במידת הצורך:\nadb shell pm enable com.mitv.tvhome</string>
+    <string name="about_title">אודות MinimalTV</string>
+    <string name="about_desc">לאנצ\'ר מהיר וקל משקל בקוד פתוח ל-Android TV.\nרישיון: MIT\nGitHub: github.com/unix14/minimal_tv</string>
+</resources>

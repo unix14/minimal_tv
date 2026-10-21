@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/dialog_width"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_dialog"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="20dp">
+
+        <ImageView
+            android:id="@+id/iv_modal_app_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="fitCenter"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/tv_modal_app_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
+
+        <Button
+            android:id="@+id/btn_move_left"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/bg_button_selector"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:text="@string/action_move_left"
+            android:focusable="true" />
+
+        <Button
+            android:id="@+id/btn_move_right"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/bg_button_selector"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:text="@string/action_move_right"
+            android:focusable="true" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_toggle_favorite"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_button_selector"
+        android:textColor="@color/text_primary"
+        android:textSize="14sp"
+        android:text="@string/action_pin_favorite"
+        android:focusable="true" />
+
+    <Button
+        android:id="@+id/btn_app_info"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_button_selector"
+        android:textColor="@color/text_primary"
+        android:textSize="14sp"
+        android:text="@string/action_app_info"
+        android:focusable="true" />
+
+    <Button
+        android:id="@+id/btn_uninstall"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_button_selector"
+        android:textColor="@color/danger_red"
+        android:textSize="14sp"
+        android:text="@string/action_uninstall"
+        android:focusable="true" />
+
+    <Button
+        android:id="@+id/btn_hide_app"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_button_selector"
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp"
+        android:text="@string/action_hide"
+        android:focusable="true" />
+
+    <Button
+        android:id="@+id/btn_close_context"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@drawable/bg_button_selector"
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp"
+        android:text="@string/btn_close"
+        android:focusable="true" />
+
+</LinearLayout>
