@@ -12,8 +12,8 @@
         android:layout_alignParentTop="true"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingStart="@dimen/tv_overscan_horizontal"
-        android:paddingEnd="@dimen/tv_overscan_horizontal"
+        android:paddingStart="@dimen/top_bar_padding_horizontal"
+        android:paddingEnd="@dimen/top_bar_padding_horizontal"
         android:background="@color/top_bar_bg">
 
         <LinearLayout
@@ -28,59 +28,63 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_primary"
-                android:textSize="26sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-medium"
                 android:text="20:00" />
 
             <View
                 android:layout_width="1dp"
-                android:layout_height="18dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="#334155" />
+                android:layout_height="14dp"
+                android:layout_marginStart="14dp"
+                android:layout_marginEnd="14dp"
+                android:background="#26262E" />
 
             <TextView
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_secondary"
-                android:textSize="16sp"
-                android:text="Monday, Oct 21" />
+                android:textSize="13sp"
+                android:fontFamily="sans-serif"
+                android:text="Wednesday, Oct 21" />
         </LinearLayout>
 
         <ImageButton
             android:id="@+id/btn_launcher_settings"
             android:layout_width="@dimen/top_bar_icon_size"
             android:layout_height="@dimen/top_bar_icon_size"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/bg_icon_button"
-            android:src="@drawable/ic_tune"
-            android:scaleType="centerInside"
-            android:padding="8dp"
-            android:contentDescription="@string/action_launcher_settings"
-            android:focusable="true"
-            android:nextFocusDown="@+id/main_browse_fragment"
-            android:nextFocusRight="@+id/btn_system_settings" />
-
-        <ImageButton
-            android:id="@+id/btn_system_settings"
-            android:layout_width="@dimen/top_bar_icon_size"
-            android:layout_height="@dimen/top_bar_icon_size"
             android:background="@drawable/bg_icon_button"
             android:src="@drawable/ic_settings"
             android:scaleType="centerInside"
             android:padding="8dp"
-            android:contentDescription="@string/action_settings"
+            android:contentDescription="@string/action_launcher_settings"
             android:focusable="true"
-            android:nextFocusDown="@+id/main_browse_fragment"
-            android:nextFocusLeft="@+id/btn_launcher_settings" />
+            android:focusableInTouchMode="true"
+            android:nextFocusDown="@+id/main_browse_fragment" />
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/main_browse_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/top_bar" />
+        android:layout_below="@id/top_bar"
+        android:paddingTop="12dp"
+        android:clipToPadding="false" />
+
+    <!-- Hosts the native Leanback settings drawer: dimmed scrim, pane docked full-height to the screen edge -->
+    <FrameLayout
+        android:id="@+id/settings_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:background="#B3000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="24dp"
+        android:visibility="gone" />
 
 </RelativeLayout>

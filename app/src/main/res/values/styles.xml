@@ -7,10 +7,30 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowOverscan">true</item>
+        <!-- Native Android TV settings (Leanback preference) look for the settings drawer -->
+        <item name="preferenceTheme">@style/CustomPreferenceThemeOverlay</item>
+        <item name="defaultBrandColor">@color/settings_title_bg</item>
+        <item name="defaultBrandColorDark">@color/settings_title_bg</item>
+        <item name="android:colorAccent">@color/accent_main_light</item>
+        <item name="android:listPreferredItemHeight">64dp</item>
+        <item name="android:selectableItemBackground">@drawable/bg_settings_item_selector</item>
+    </style>
+
+    <style name="CustomPreferenceThemeOverlay" parent="PreferenceThemeOverlay.v14.Leanback">
+        <item name="android:windowBackground">@color/settings_panel_bg</item>
+        <item name="android:colorPrimary">@color/settings_title_bg</item>
+        <item name="defaultBrandColor">@color/settings_title_bg</item>
+        <item name="defaultBrandColorDark">@color/settings_title_bg</item>
     </style>
     <style name="Theme.MinimalTV.Dialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@drawable/bg_dialog</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
+    </style>
+    <style name="Theme.MinimalTV.SidePanel" parent="Theme.MinimalTV">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
     </style>
 </resources>

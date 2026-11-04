@@ -7,4 +7,5 @@ interface ChannelRepository {
     fun getPreviewChannels(): Flow<List<ChannelModel>>
     suspend fun refreshChannels()
     suspend fun setChannelEnabled(channelId: Long, enabled: Boolean)
+    suspend fun moveChannel(channelId: Long, direction: Int)
 }

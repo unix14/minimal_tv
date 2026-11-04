@@ -9,8 +9,17 @@ import com.unix14.minimaltv.ui.main.MainActivity
 class HomeInterceptorAccessibilityService : AccessibilityService() {
 
     override fun onKeyEvent(event: KeyEvent): Boolean {
-        if (event.keyCode == KeyEvent.KEYCODE_HOME && event.action == KeyEvent.ACTION_UP) {
-            launchLauncher()
+        android.util.Log.d("HomeInterceptor", "onKeyEvent keyCode=${event.keyCode} action=${event.action}")
+        if (com.unix14.minimaltv.util.LauncherHelper.isTvInputKey(event.keyCode)) {
+            if (event.action == KeyEvent.ACTION_DOWN) {
+                com.unix14.minimaltv.util.LauncherHelper.openInputSource(this)
+            }
+            return true
+        }
+        if (event.keyCode == KeyEvent.KEYCODE_HOME) {
+            if (event.action == KeyEvent.ACTION_UP) {
+                launchLauncher()
+            }
             return true
         }
         return super.onKeyEvent(event)
@@ -19,9 +28,14 @@ class HomeInterceptorAccessibilityService : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event == null) return
         val pkg = event.packageName?.toString() ?: return
-        // Double-insurance: intercept Xiaomi PatchWall takeover attempts
+        val cls = event.className?.toString() ?: ""
+        // Intercept Xiaomi PatchWall and Google TV launcher takeovers, but preserve the native Inputs side drawer panel
         if (pkg == "com.mitv.tvhome" || pkg == "com.xiaomi.mitv.tvhome") {
             launchLauncher()
+        } else if (pkg == "com.google.android.tvlauncher") {
+            if (!cls.contains("InputsPanelActivity") && !cls.contains("inputs")) {
+                launchLauncher()
+            }
         }
     }
 

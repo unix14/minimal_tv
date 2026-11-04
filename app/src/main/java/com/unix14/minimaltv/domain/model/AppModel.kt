@@ -6,8 +6,11 @@ data class AppModel(
     val packageName: String,
     val activityName: String,
     val label: String,
-    val bannerOrIcon: Drawable?,
+    val banner: Drawable?,
+    val icon: Drawable?,
     val isFavorite: Boolean = false,
-    val isHidden: Boolean = false,
-    val isBanner: Boolean = false
-)
+    val isHidden: Boolean = false
+) {
+    val isBanner: Boolean get() = banner != null
+    val bannerOrIcon: Drawable? get() = banner ?: icon
+}

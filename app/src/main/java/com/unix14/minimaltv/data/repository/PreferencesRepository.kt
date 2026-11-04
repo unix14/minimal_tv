@@ -17,8 +17,11 @@ class PreferencesRepository(private val context: Context) {
         val FAVORITES = stringSetPreferencesKey("favorites")
         val HIDDEN_APPS = stringSetPreferencesKey("hidden_apps")
         val APP_ORDER = stringPreferencesKey("app_order")
-        val DISABLED_CHANNELS = stringSetPreferencesKey("disabled_channels")
+        val ENABLED_CHANNELS = stringSetPreferencesKey("enabled_channels")
+        val CHANNEL_ORDER = stringPreferencesKey("channel_order")
         val APP_LOCALE = stringPreferencesKey("app_locale")
+        val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
+        val INITIAL_FAVORITES_INITIALIZED = booleanPreferencesKey("initial_favorites_initialized")
     }
 
     val favoritesFlow: Flow<Set<String>> = context.dataStore.data
@@ -42,11 +45,20 @@ class PreferencesRepository(private val context: Context) {
             if (raw.isBlank()) emptyList() else raw.split(",").filter { it.isNotBlank() }
         }
 
-    val disabledChannelsFlow: Flow<Set<String>> = context.dataStore.data
+    val enabledChannelsFlow: Flow<Set<String>> = context.dataStore.data
         .catch { exception ->
             if (exception is IOException) emit(emptyPreferences()) else throw exception
         }
-        .map { preferences -> preferences[PreferencesKeys.DISABLED_CHANNELS] ?: emptySet() }
+        .map { preferences -> preferences[PreferencesKeys.ENABLED_CHANNELS] ?: emptySet() }
+
+    val channelOrderFlow: Flow<List<String>> = context.dataStore.data
+        .catch { exception ->
+            if (exception is IOException) emit(emptyPreferences()) else throw exception
+        }
+        .map { preferences ->
+            val raw = preferences[PreferencesKeys.CHANNEL_ORDER] ?: ""
+            if (raw.isBlank()) emptyList() else raw.split(",").filter { it.isNotBlank() }
+        }
 
     val appLocaleFlow: Flow<String> = context.dataStore.data
         .catch { exception ->
@@ -54,11 +66,31 @@ class PreferencesRepository(private val context: Context) {
         }
         .map { preferences -> preferences[PreferencesKeys.APP_LOCALE] ?: "system" }
 
+    val onboardingCompletedFlow: Flow<Boolean> = context.dataStore.data
+        .catch { exception ->
+            if (exception is IOException) emit(emptyPreferences()) else throw exception
+        }
+        .map { preferences -> preferences[PreferencesKeys.ONBOARDING_COMPLETED] ?: false }
+
+    val initialFavoritesInitializedFlow: Flow<Boolean> = context.dataStore.data
+        .catch { exception ->
+            if (exception is IOException) emit(emptyPreferences()) else throw exception
+        }
+        .map { preferences -> preferences[PreferencesKeys.INITIAL_FAVORITES_INITIALIZED] ?: false }
+
     suspend fun setFavorite(packageName: String, isFavorite: Boolean) {
         context.dataStore.edit { preferences ->
             val current = preferences[PreferencesKeys.FAVORITES]?.toMutableSet() ?: mutableSetOf()
             if (isFavorite) current.add(packageName) else current.remove(packageName)
             preferences[PreferencesKeys.FAVORITES] = current
+        }
+    }
+
+    suspend fun initDefaultFavorites(favoritesList: List<String>) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.FAVORITES] = favoritesList.toSet()
+            preferences[PreferencesKeys.APP_ORDER] = favoritesList.joinToString(",")
+            preferences[PreferencesKeys.INITIAL_FAVORITES_INITIALIZED] = true
         }
     }
 
@@ -78,16 +110,28 @@ class PreferencesRepository(private val context: Context) {
 
     suspend fun setChannelEnabled(channelId: Long, enabled: Boolean) {
         context.dataStore.edit { preferences ->
-            val current = preferences[PreferencesKeys.DISABLED_CHANNELS]?.toMutableSet() ?: mutableSetOf()
+            val current = preferences[PreferencesKeys.ENABLED_CHANNELS]?.toMutableSet() ?: mutableSetOf()
             val idStr = channelId.toString()
-            if (enabled) current.remove(idStr) else current.add(idStr)
-            preferences[PreferencesKeys.DISABLED_CHANNELS] = current
+            if (enabled) current.add(idStr) else current.remove(idStr)
+            preferences[PreferencesKeys.ENABLED_CHANNELS] = current
+        }
+    }
+
+    suspend fun saveChannelOrder(orderList: List<String>) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.CHANNEL_ORDER] = orderList.joinToString(",")
         }
     }
 
     suspend fun setAppLocale(locale: String) {
         context.dataStore.edit { preferences ->
             preferences[PreferencesKeys.APP_LOCALE] = locale
+        }
+    }
+
+    suspend fun setOnboardingCompleted(completed: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[PreferencesKeys.ONBOARDING_COMPLETED] = completed
         }
     }
 }

@@ -11,5 +11,6 @@ interface AppRepository {
     suspend fun unpinFavorite(packageName: String)
     suspend fun hideApp(packageName: String)
     suspend fun unhideApp(packageName: String)
-    suspend fun moveApp(packageName: String, direction: Int)
+    /** [key] is an app package name or an HDMI shortcut key (see HdmiCardItem.orderKey). */
+    suspend fun moveApp(key: String, direction: Int)
 }

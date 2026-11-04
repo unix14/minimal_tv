@@ -31,6 +31,9 @@ class MainViewModel(
     val favoriteApps: StateFlow<List<AppModel>> = appRepository.getFavoriteApps()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
+    val homeOrder: StateFlow<List<String>> = com.unix14.minimaltv.MinimalTVApp.instance.preferencesRepository.appOrderFlow
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
     val previewChannels: StateFlow<List<ChannelModel>> = channelRepository.getPreviewChannels()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
@@ -50,14 +53,26 @@ class MainViewModel(
 
     private fun startClockTicker() {
         viewModelScope.launch {
+            var cachedLocale: Locale? = null
+            var timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            var dateFormat = SimpleDateFormat("EEEE, MMM d", Locale.getDefault())
             while (isActive) {
-                val now = Date()
                 val currentLocale = Locale.getDefault()
-                val timeFormat = SimpleDateFormat("HH:mm", currentLocale)
-                val dateFormat = SimpleDateFormat("EEEE, MMM d", currentLocale)
-                _currentTime.value = timeFormat.format(now)
-                _currentDate.value = dateFormat.format(now)
-                delay(1000L)
+                if (currentLocale != cachedLocale) {
+                    cachedLocale = currentLocale
+                    timeFormat = SimpleDateFormat("HH:mm", currentLocale)
+                    dateFormat = SimpleDateFormat("EEEE, MMM d", currentLocale)
+                }
+                val now = Date()
+                val formattedTime = timeFormat.format(now)
+                val formattedDate = dateFormat.format(now)
+                if (_currentTime.value != formattedTime) {
+                    _currentTime.value = formattedTime
+                }
+                if (_currentDate.value != formattedDate) {
+                    _currentDate.value = formattedDate
+                }
+                delay(10_000L)
             }
         }
     }
@@ -87,15 +102,22 @@ class MainViewModel(
         }
     }
 
-    fun moveApp(packageName: String, direction: Int) {
+    /** [key] is an app package name or an HDMI shortcut key (see HdmiCardItem.orderKey). */
+    fun moveApp(key: String, direction: Int) {
         viewModelScope.launch {
-            appRepository.moveApp(packageName, direction)
+            appRepository.moveApp(key, direction)
         }
     }
 
     fun setChannelEnabled(channelId: Long, enabled: Boolean) {
         viewModelScope.launch {
             channelRepository.setChannelEnabled(channelId, enabled)
+        }
+    }
+
+    fun moveChannel(channelId: Long, direction: Int) {
+        viewModelScope.launch {
+            channelRepository.moveChannel(channelId, direction)
         }
     }
 
@@ -107,5 +129,14 @@ class MainViewModel(
 
     fun isAccessibilityEnabled(): Boolean {
         return settingsRepository.isAccessibilityEnabled()
+    }
+
+    val onboardingCompleted: StateFlow<Boolean> = com.unix14.minimaltv.MinimalTVApp.instance.preferencesRepository.onboardingCompletedFlow
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
+
+    fun setOnboardingCompleted(completed: Boolean) {
+        viewModelScope.launch {
+            com.unix14.minimaltv.MinimalTVApp.instance.preferencesRepository.setOnboardingCompleted(completed)
+        }
     }
 }
