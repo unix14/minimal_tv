@@ -70,6 +70,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun runEntranceAnimation() {
+        // Skip the slide/fade-in entirely in reduced mode so the home screen is usable on the first frame
+        if (com.unix14.minimaltv.util.Motion.reduced) return
         binding.topBar.alpha = 0f
         binding.topBar.translationY = -resources.displayMetrics.density * 20
         binding.topBar.animate()
@@ -161,7 +163,7 @@ class MainActivity : AppCompatActivity() {
         binding.settingsContainer.visibility = View.VISIBLE
         if (!hadDrawerOpen) {
             binding.settingsContainer.alpha = 0f
-            binding.settingsContainer.animate().alpha(1f).setDuration(240).start()
+            binding.settingsContainer.animate().alpha(1f).setDuration(com.unix14.minimaltv.util.Motion.duration(240)).start()
         } else {
             binding.settingsContainer.alpha = 1f
         }
@@ -172,7 +174,7 @@ class MainActivity : AppCompatActivity() {
 
     fun closeSettings(restoreFocusToSettingsBtn: Boolean = true) {
         val fragment = settingsFragment ?: return
-        binding.settingsContainer.animate().alpha(0f).setDuration(180).start()
+        binding.settingsContainer.animate().alpha(0f).setDuration(com.unix14.minimaltv.util.Motion.duration(180)).start()
         fragment.animateClose {
             if (!isFinishing && !isDestroyed) {
                 supportFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()
@@ -200,7 +202,7 @@ class MainActivity : AppCompatActivity() {
         binding.settingsContainer.visibility = View.VISIBLE
         if (!hadDrawerOpen) {
             binding.settingsContainer.alpha = 0f
-            binding.settingsContainer.animate().alpha(1f).setDuration(240).start()
+            binding.settingsContainer.animate().alpha(1f).setDuration(com.unix14.minimaltv.util.Motion.duration(240)).start()
         } else {
             binding.settingsContainer.alpha = 1f
         }
@@ -214,7 +216,7 @@ class MainActivity : AppCompatActivity() {
 
     fun closeInputsDrawer() {
         val fragment = inputsFragment ?: return
-        binding.settingsContainer.animate().alpha(0f).setDuration(180).start()
+        binding.settingsContainer.animate().alpha(0f).setDuration(com.unix14.minimaltv.util.Motion.duration(180)).start()
         fragment.animateClose {
             if (!isFinishing && !isDestroyed) {
                 supportFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()
@@ -236,7 +238,7 @@ class MainActivity : AppCompatActivity() {
 
         if (com.unix14.minimaltv.util.LauncherHelper.isTvInputKey(event.keyCode)) {
             if (event.action == KeyEvent.ACTION_DOWN) {
-                if (isInputsOpen) closeInputsDrawer() else showInputsDrawer()
+                com.unix14.minimaltv.util.LauncherHelper.openInputSource(this)
             }
             return true
         }

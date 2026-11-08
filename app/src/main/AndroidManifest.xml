@@ -64,12 +64,7 @@
             android:theme="@style/Theme.MinimalTV.SidePanel"
             android:launchMode="singleTask"
             android:excludeFromRecents="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.tv.action.VIEW_INPUTS" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
 
         <service
             android:name=".service.HomeInterceptorAccessibilityService"

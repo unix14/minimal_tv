@@ -35,7 +35,7 @@ class LauncherSettingsFragment : LeanbackSettingsFragmentCompat() {
             val isRtl = view.layoutDirection == View.LAYOUT_DIRECTION_RTL
             val paneWidth = resources.getDimension(com.unix14.minimaltv.R.dimen.lb_settings_pane_width)
             container.translationX = if (isRtl) -paneWidth else paneWidth
-            container.animate().translationX(0f).setDuration(260).setInterpolator(android.view.animation.DecelerateInterpolator(1.8f)).start()
+            container.animate().translationX(0f).setDuration(com.unix14.minimaltv.util.Motion.duration(260)).setInterpolator(android.view.animation.DecelerateInterpolator(1.8f)).start()
         }
     }
 
@@ -45,7 +45,7 @@ class LauncherSettingsFragment : LeanbackSettingsFragmentCompat() {
         val isRtl = v.layoutDirection == View.LAYOUT_DIRECTION_RTL
         val paneWidth = resources.getDimension(com.unix14.minimaltv.R.dimen.lb_settings_pane_width)
         val targetX = if (isRtl) -paneWidth else paneWidth
-        container.animate().translationX(targetX).setDuration(200).setInterpolator(android.view.animation.AccelerateInterpolator(1.8f)).withEndAction(onEnd).start()
+        container.animate().translationX(targetX).setDuration(com.unix14.minimaltv.util.Motion.duration(200)).setInterpolator(android.view.animation.AccelerateInterpolator(1.8f)).withEndAction(onEnd).start()
     }
 
     /** Returns true when the Back press was consumed here (inner page action or navigating up one page). */

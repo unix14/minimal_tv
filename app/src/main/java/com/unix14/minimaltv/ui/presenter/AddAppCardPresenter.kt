@@ -28,11 +28,9 @@ class AddAppCardPresenter(
 
         holder.root.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
-                v.animate().scaleX(1.05f).scaleY(1.05f).setDuration(150).setInterpolator(DecelerateInterpolator(2.0f)).start()
-                ViewCompat.setElevation(v, 10f)
+                com.unix14.minimaltv.util.Motion.focusCard(v, 1.05f, 10f)
             } else {
-                v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).setInterpolator(DecelerateInterpolator(2.0f)).start()
-                ViewCompat.setElevation(v, 2f)
+                com.unix14.minimaltv.util.Motion.focusCard(v, 1.0f, 2f)
             }
         }
 

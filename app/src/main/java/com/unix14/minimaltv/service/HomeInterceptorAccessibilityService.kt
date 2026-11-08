@@ -8,6 +8,8 @@ import com.unix14.minimaltv.ui.main.MainActivity
 
 class HomeInterceptorAccessibilityService : AccessibilityService() {
 
+    private var currentTopActivity: String = ""
+
     override fun onKeyEvent(event: KeyEvent): Boolean {
         android.util.Log.d("HomeInterceptor", "onKeyEvent keyCode=${event.keyCode} action=${event.action}")
         if (com.unix14.minimaltv.util.LauncherHelper.isTvInputKey(event.keyCode)) {
@@ -29,11 +31,26 @@ class HomeInterceptorAccessibilityService : AccessibilityService() {
         if (event == null) return
         val pkg = event.packageName?.toString() ?: return
         val cls = event.className?.toString() ?: ""
-        // Intercept Xiaomi PatchWall and Google TV launcher takeovers, but preserve the native Inputs side drawer panel
+
+        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            currentTopActivity = cls
+        }
+
+        // Intercept Xiaomi PatchWall
         if (pkg == "com.mitv.tvhome" || pkg == "com.xiaomi.mitv.tvhome") {
             launchLauncher()
-        } else if (pkg == "com.google.android.tvlauncher") {
-            if (!cls.contains("InputsPanelActivity") && !cls.contains("inputs")) {
+            return
+        }
+
+        // Handle Google TV launcher: preserve InputsPanelActivity, only intercept home launcher
+        if (pkg == "com.google.android.tvlauncher") {
+            if (currentTopActivity.contains("InputsPanelActivity") || currentTopActivity.contains("inputs")) {
+                return
+            }
+            if (cls.contains("InputsPanelActivity") || cls.contains("inputs")) {
+                return
+            }
+            if (currentTopActivity.contains("MainActivity") || cls == "com.google.android.tvlauncher.MainActivity") {
                 launchLauncher()
             }
         }

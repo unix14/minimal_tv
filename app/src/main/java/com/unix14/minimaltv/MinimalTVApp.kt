@@ -54,6 +54,8 @@ class MinimalTVApp : Application(), ImageLoaderFactory {
         super.onCreate()
         instance = this
 
+        com.unix14.minimaltv.util.Motion.init(this)
+
         preferencesRepository = PreferencesRepository(this)
         appRepository = AppRepositoryImpl(this, preferencesRepository)
         channelRepository = ChannelRepositoryImpl(this, preferencesRepository)

@@ -87,4 +87,6 @@
     <string name="inputs_channels_title">TV Channels</string>
     <string name="inputs_channels_subtitle">Live TV</string>
     <string name="inputs_composite_subtitle">Composite</string>
+    <string name="settings_reduce_animations">Reduce animations</string>
+    <string name="settings_reduce_animations_desc">Disable focus animations, shadows and transitions for instant speed on low-end TVs</string>
 </resources>

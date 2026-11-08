@@ -451,6 +451,23 @@ class SystemSettingsPage : BaseSettingsPage() {
         ) {
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }.also { screen.addPreference(it) }
+
+        val reduceAnimPref = SwitchPreferenceCompat(preferenceManager.context).apply {
+            key = "reduce_animations_pref"
+            title = getString(R.string.settings_reduce_animations)
+            summary = getString(R.string.settings_reduce_animations_desc)
+            icon = tintedIcon(R.drawable.ic_tune, ICON_COLOR)
+            isPersistent = false
+            isChecked = com.unix14.minimaltv.util.Motion.reduced
+            setOnPreferenceChangeListener { _, newValue ->
+                val b = newValue as Boolean
+                com.unix14.minimaltv.util.Motion.setReduced(requireContext(), b)
+                isChecked = b
+                true
+            }
+        }
+        screen.addPreference(reduceAnimPref)
+
         updateStatus()
     }
 
