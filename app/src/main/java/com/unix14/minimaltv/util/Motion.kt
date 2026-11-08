@@ -33,12 +33,12 @@ object Motion {
     /** Returns [ms], or 0 when animations are reduced. */
     fun duration(ms: Long): Long = if (reduced) 0L else ms
 
-    /** Applies a card focus scale + elevation, instantly and shadow-free when animations are reduced. */
+    /** Applies a card focus scale + elevation, or flat zero-effect scale & shadows when animations are reduced. */
     fun focusCard(v: View, scale: Float, elevation: Float, durationMs: Long = 150) {
         v.animate().cancel()
         if (reduced) {
-            v.scaleX = scale
-            v.scaleY = scale
+            v.scaleX = 1.0f
+            v.scaleY = 1.0f
             ViewCompat.setElevation(v, 0f)
         } else {
             v.animate().scaleX(scale).scaleY(scale).setDuration(durationMs).setInterpolator(DecelerateInterpolator(2.0f)).start()
@@ -54,6 +54,9 @@ object Motion {
     /** Click pulse + scale-up launch transition for [v]; when reduced, no pulse and an instant (no-animation) activity switch. */
     fun launchOptions(v: View, restingScale: Float): Bundle? {
         if (reduced) {
+            v.scaleX = 1.0f
+            v.scaleY = 1.0f
+            v.alpha = 1.0f
             return try {
                 ActivityOptionsCompat.makeCustomAnimation(v.context, 0, 0).toBundle()
             } catch (e: Exception) {

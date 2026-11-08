@@ -422,6 +422,7 @@ class SystemSettingsPage : BaseSettingsPage() {
 
     private var defaultLauncherPreference: Preference? = null
     private var accessibilityPreference: Preference? = null
+    private var reduceAnimPreference: Preference? = null
 
     override fun buildPreferences(screen: PreferenceScreen) {
         screen.addPreference(
@@ -452,21 +453,14 @@ class SystemSettingsPage : BaseSettingsPage() {
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }.also { screen.addPreference(it) }
 
-        val reduceAnimPref = SwitchPreferenceCompat(preferenceManager.context).apply {
-            key = "reduce_animations_pref"
-            title = getString(R.string.settings_reduce_animations)
-            summary = getString(R.string.settings_reduce_animations_desc)
-            icon = tintedIcon(R.drawable.ic_tune, ICON_COLOR)
-            isPersistent = false
-            isChecked = com.unix14.minimaltv.util.Motion.reduced
-            setOnPreferenceChangeListener { _, newValue ->
-                val b = newValue as Boolean
-                com.unix14.minimaltv.util.Motion.setReduced(requireContext(), b)
-                isChecked = b
-                true
-            }
-        }
-        screen.addPreference(reduceAnimPref)
+        reduceAnimPreference = newPreference(
+            title = getString(R.string.settings_reduce_animations),
+            iconRes = R.drawable.ic_tune
+        ) {
+            val enabled = !com.unix14.minimaltv.util.Motion.reduced
+            com.unix14.minimaltv.util.Motion.setReduced(requireContext(), enabled)
+            updateReduceAnimStatus(enabled)
+        }.also { screen.addPreference(it) }
 
         updateStatus()
     }
@@ -485,6 +479,15 @@ class SystemSettingsPage : BaseSettingsPage() {
         accessibilityPreference?.summary = getString(
             if (isAccessibilityServiceEnabled(context)) R.string.settings_accessibility_enabled_status
             else R.string.settings_accessibility_disabled_status
+        )
+        updateReduceAnimStatus(com.unix14.minimaltv.util.Motion.reduced)
+    }
+
+    private fun updateReduceAnimStatus(enabled: Boolean) {
+        val pref = reduceAnimPreference ?: return
+        pref.summary = getString(
+            if (enabled) R.string.settings_reduce_animations_on
+            else R.string.settings_reduce_animations_off
         )
     }
 

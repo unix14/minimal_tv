@@ -89,4 +89,6 @@
     <string name="inputs_composite_subtitle">Composite</string>
     <string name="settings_reduce_animations">Reduce animations</string>
     <string name="settings_reduce_animations_desc">Disable focus animations, shadows and transitions for instant speed on low-end TVs</string>
+    <string name="settings_reduce_animations_on">Active • Fast, instant transitions and zero shadows</string>
+    <string name="settings_reduce_animations_off">Off • Normal animations and effects</string>
 </resources>
