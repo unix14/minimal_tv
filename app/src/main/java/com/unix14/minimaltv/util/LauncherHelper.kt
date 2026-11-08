@@ -78,8 +78,39 @@ object LauncherHelper {
         return keyCode == android.view.KeyEvent.KEYCODE_TV_INPUT || keyCode == android.view.KeyEvent.KEYCODE_WINDOW || keyCode in android.view.KeyEvent.KEYCODE_TV_INPUT_HDMI_1..android.view.KeyEvent.KEYCODE_TV_INPUT_VGA_1
     }
 
-    /** Opens the MinimalTV / Android TV side drawer selection of HDMI inputs. */
+    private const val ACTION_VIEW_INPUTS = "com.android.tv.action.VIEW_INPUTS"
+
+    /** Returns the TV's own inputs panel (e.g. Google TV launcher's InputsPanelActivity), or null if the system has none enabled. */
+    private fun findSystemInputsPanel(context: Context): Intent? {
+        val intent = Intent(ACTION_VIEW_INPUTS)
+        val match = context.packageManager.queryIntentActivities(intent, 0).firstOrNull { it.activityInfo.packageName != context.packageName }
+        if (match != null) {
+            return Intent(ACTION_VIEW_INPUTS).setClassName(match.activityInfo.packageName, match.activityInfo.name)
+        }
+        try {
+            val tvLauncherComponent = android.content.ComponentName("com.google.android.tvlauncher", "com.google.android.tvlauncher.inputs.InputsPanelActivity")
+            val info = context.packageManager.getActivityInfo(tvLauncherComponent, 0)
+            if (info.isEnabled) {
+                return Intent(ACTION_VIEW_INPUTS).setComponent(tvLauncherComponent)
+            }
+        } catch (e: Exception) {}
+        return null
+    }
+
+    /** True when the TV ships an enabled system inputs panel, so the Input key should be left to the system. */
+    fun hasSystemInputsPanel(context: Context): Boolean = findSystemInputsPanel(context) != null
+
+    /** Opens the TV's native inputs panel, falling back to the MinimalTV HDMI inputs drawer only when the system has none. */
     fun openInputSource(context: Context) {
+        val systemPanel = findSystemInputsPanel(context)
+        if (systemPanel != null) {
+            try {
+                context.startActivity(systemPanel.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                return
+            } catch (e: Exception) {
+                android.util.Log.w("LauncherHelper", "System inputs panel failed, using fallback drawer", e)
+            }
+        }
         if (context is com.unix14.minimaltv.ui.main.MainActivity) {
             if (context.isInputsOpen) context.closeInputsDrawer() else context.showInputsDrawer()
             return

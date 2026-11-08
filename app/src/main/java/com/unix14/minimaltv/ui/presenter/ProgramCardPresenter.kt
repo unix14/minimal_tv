@@ -52,34 +52,16 @@ class ProgramCardPresenter : Presenter() {
 
         holder.root.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
-                v.animate().scaleX(1.06f).scaleY(1.06f).setDuration(150).start()
-                ViewCompat.setElevation(v, 10f)
+                com.unix14.minimaltv.util.Motion.focusCard(v, 1.06f, 10f)
             } else {
-                v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).start()
-                ViewCompat.setElevation(v, 2f)
+                com.unix14.minimaltv.util.Motion.focusCard(v, 1.0f, 2f)
             }
         }
 
         holder.root.setOnClickListener {
             val context = holder.root.context
             if (program.intentUri != null) {
-                holder.root.animate().scaleX(1.12f).scaleY(1.12f).alpha(0.85f).setDuration(120).withEndAction {
-                    holder.root.scaleX = 1.06f
-                    holder.root.scaleY = 1.06f
-                    holder.root.alpha = 1.0f
-                }.start()
-
-                val opts = try {
-                    androidx.core.app.ActivityOptionsCompat.makeScaleUpAnimation(
-                        holder.root,
-                        0,
-                        0,
-                        holder.root.width,
-                        holder.root.height
-                    ).toBundle()
-                } catch (e: Exception) {
-                    null
-                }
+                val opts = com.unix14.minimaltv.util.Motion.launchOptions(holder.root, 1.06f)
 
                 try {
                     val intent = Intent.parseUri(program.intentUri.toString(), Intent.URI_INTENT_SCHEME).apply {

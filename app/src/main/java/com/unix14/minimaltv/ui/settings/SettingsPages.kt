@@ -37,6 +37,25 @@ private const val ICON_COLOR = 0xFFEEEEEE.toInt()
 private const val ICON_COLOR_DIM = 0x66EEEEEE
 private const val ICON_COLOR_ACTIVE = 0xFF818CF8.toInt()
 
+open class LeanbackSwitchPreference(context: Context) : SwitchPreferenceCompat(context) {
+    override fun onBindViewHolder(holder: androidx.preference.PreferenceViewHolder) {
+        super.onBindViewHolder(holder)
+        val switchView = (holder.findViewById(android.R.id.switch_widget) as? android.widget.Switch)
+            ?: (holder.findViewById(androidx.preference.R.id.switchWidget) as? android.widget.Switch)
+        if (switchView != null) {
+            switchView.setOnCheckedChangeListener(null)
+            switchView.isChecked = isChecked
+            switchView.setOnCheckedChangeListener { _, checked ->
+                if (!callChangeListener(checked)) {
+                    switchView.isChecked = !checked
+                    return@setOnCheckedChangeListener
+                }
+                setChecked(checked)
+            }
+        }
+    }
+}
+
 /** Common plumbing for every page of the settings drawer. */
 abstract class BaseSettingsPage : LeanbackPreferenceFragmentCompat() {
 
@@ -422,6 +441,7 @@ class SystemSettingsPage : BaseSettingsPage() {
 
     private var defaultLauncherPreference: Preference? = null
     private var accessibilityPreference: Preference? = null
+    private var reduceAnimPreference: SwitchPreferenceCompat? = null
 
     override fun buildPreferences(screen: PreferenceScreen) {
         screen.addPreference(
@@ -451,6 +471,21 @@ class SystemSettingsPage : BaseSettingsPage() {
         ) {
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }.also { screen.addPreference(it) }
+
+        reduceAnimPreference = LeanbackSwitchPreference(preferenceManager.context).apply {
+            key = com.unix14.minimaltv.util.Motion.KEY_REDUCE
+            title = getString(R.string.settings_reduce_animations)
+            summary = getString(R.string.settings_reduce_animations_desc)
+            icon = tintedIcon(R.drawable.ic_tune, ICON_COLOR)
+            setDefaultValue(false)
+            isChecked = com.unix14.minimaltv.util.Motion.reduced
+            setOnPreferenceChangeListener { _, newValue ->
+                val enabled = newValue as Boolean
+                com.unix14.minimaltv.util.Motion.setReduced(requireContext(), enabled)
+                true
+            }
+        }.also { screen.addPreference(it) }
+
         updateStatus()
     }
 
@@ -469,6 +504,7 @@ class SystemSettingsPage : BaseSettingsPage() {
             if (isAccessibilityServiceEnabled(context)) R.string.settings_accessibility_enabled_status
             else R.string.settings_accessibility_disabled_status
         )
+        reduceAnimPreference?.isChecked = com.unix14.minimaltv.util.Motion.reduced
     }
 
     private fun isAccessibilityServiceEnabled(context: Context): Boolean {

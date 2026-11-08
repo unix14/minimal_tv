@@ -87,4 +87,8 @@
     <string name="inputs_channels_title">ערוצי טלוויזיה</string>
     <string name="inputs_channels_subtitle">טלוויזיה בשידור חי</string>
     <string name="inputs_composite_subtitle">חיבור AV</string>
+    <string name="settings_reduce_animations">הפחת הנפשות</string>
+    <string name="settings_reduce_animations_desc">כיבוי אפקטי פוקוס, צללים ומעברים לביצועים מהירים ומיידיים בטלוויזיה</string>
+    <string name="settings_reduce_animations_on">מופעל • מעברים מיידיים ללא הנפשות וצללים</string>
+    <string name="settings_reduce_animations_off">כבוי • הנפשות ואפקטים רגילים</string>
 </resources>

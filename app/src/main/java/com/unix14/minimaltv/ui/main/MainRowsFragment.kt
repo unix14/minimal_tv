@@ -153,6 +153,9 @@ class MainRowsFragment : RowsSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (com.unix14.minimaltv.util.Motion.reduced) {
+            verticalGridView?.itemAnimator = null
+        }
 
         verticalGridView?.setOnKeyInterceptListener { event ->
             if (isInPlaceReordering) {

@@ -36,6 +36,9 @@ class CustomListRowPresenter : ListRowPresenter() {
         super.initializeRowViewHolder(holder)
         val rowViewHolder = holder as? ListRowPresenter.ViewHolder ?: return
         val hgv = rowViewHolder.gridView
+        if (com.unix14.minimaltv.util.Motion.reduced) {
+            hgv.itemAnimator = null
+        }
         val overscan = hgv.resources.getDimensionPixelSize(R.dimen.tv_overscan_horizontal)
         hgv.setPaddingRelative(overscan, 0, overscan, 0)
         hgv.clipToPadding = false

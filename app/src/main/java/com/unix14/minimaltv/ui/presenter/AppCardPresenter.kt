@@ -63,13 +63,13 @@ class AppCardPresenter(
             holder.reorderOverlay.visibility = View.VISIBLE
             holder.root.scaleX = 1.08f
             holder.root.scaleY = 1.08f
-            ViewCompat.setElevation(holder.root, 16f)
+            com.unix14.minimaltv.util.Motion.elevation(holder.root, 16f)
             holder.label.setTextColor(Color.WHITE)
 
             holder.root.setOnFocusChangeListener { _, _ ->
                 holder.root.scaleX = 1.08f
                 holder.root.scaleY = 1.08f
-                ViewCompat.setElevation(holder.root, 16f)
+                com.unix14.minimaltv.util.Motion.elevation(holder.root, 16f)
             }
 
             holder.root.setOnKeyListener { _, keyCode, event ->
@@ -109,12 +109,10 @@ class AppCardPresenter(
         // Subtle 1.05x focus animation with soft elevation
         holder.root.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
-                v.animate().scaleX(1.05f).scaleY(1.05f).setDuration(150).setInterpolator(DecelerateInterpolator(2.0f)).start()
-                ViewCompat.setElevation(v, 10f)
+                com.unix14.minimaltv.util.Motion.focusCard(v, 1.05f, 10f)
                 holder.label.setTextColor(Color.WHITE)
             } else {
-                v.animate().scaleX(1.0f).scaleY(1.0f).setDuration(150).setInterpolator(DecelerateInterpolator(2.0f)).start()
-                ViewCompat.setElevation(v, 2f)
+                com.unix14.minimaltv.util.Motion.focusCard(v, 1.0f, 2f)
                 holder.label.setTextColor(ContextCompat.getColor(v.context, R.color.text_primary))
             }
         }
@@ -164,23 +162,7 @@ class AppCardPresenter(
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
             }
 
-            holder.root.animate().scaleX(1.12f).scaleY(1.12f).alpha(0.85f).setDuration(120).withEndAction {
-                holder.root.scaleX = 1.05f
-                holder.root.scaleY = 1.05f
-                holder.root.alpha = 1.0f
-            }.start()
-
-            val opts = try {
-                androidx.core.app.ActivityOptionsCompat.makeScaleUpAnimation(
-                    holder.root,
-                    0,
-                    0,
-                    holder.root.width,
-                    holder.root.height
-                ).toBundle()
-            } catch (e: Exception) {
-                null
-            }
+            val opts = com.unix14.minimaltv.util.Motion.launchOptions(holder.root, 1.05f)
 
             try {
                 context.startActivity(intent, opts)
