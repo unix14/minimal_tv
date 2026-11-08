@@ -161,9 +161,12 @@ class MainActivity : AppCompatActivity() {
         binding.topBar.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
         binding.mainBrowseFragment.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
         binding.settingsContainer.visibility = View.VISIBLE
-        if (!hadDrawerOpen) {
+        if (com.unix14.minimaltv.util.Motion.reduced) {
+            binding.settingsContainer.animate().cancel()
+            binding.settingsContainer.alpha = 1f
+        } else if (!hadDrawerOpen) {
             binding.settingsContainer.alpha = 0f
-            binding.settingsContainer.animate().alpha(1f).setDuration(com.unix14.minimaltv.util.Motion.duration(240)).start()
+            binding.settingsContainer.animate().alpha(1f).setDuration(240).start()
         } else {
             binding.settingsContainer.alpha = 1f
         }
@@ -174,7 +177,19 @@ class MainActivity : AppCompatActivity() {
 
     fun closeSettings(restoreFocusToSettingsBtn: Boolean = true) {
         val fragment = settingsFragment ?: return
-        binding.settingsContainer.animate().alpha(0f).setDuration(com.unix14.minimaltv.util.Motion.duration(180)).start()
+        if (com.unix14.minimaltv.util.Motion.reduced) {
+            binding.settingsContainer.animate().cancel()
+            supportFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()
+            binding.settingsContainer.visibility = View.GONE
+            binding.settingsContainer.alpha = 1f
+            binding.topBar.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
+            binding.mainBrowseFragment.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
+            if (restoreFocusToSettingsBtn) {
+                binding.btnLauncherSettings.requestFocus()
+            }
+            return
+        }
+        binding.settingsContainer.animate().alpha(0f).setDuration(180).start()
         fragment.animateClose {
             if (!isFinishing && !isDestroyed) {
                 supportFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()
@@ -200,9 +215,12 @@ class MainActivity : AppCompatActivity() {
         binding.topBar.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
         binding.mainBrowseFragment.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
         binding.settingsContainer.visibility = View.VISIBLE
-        if (!hadDrawerOpen) {
+        if (com.unix14.minimaltv.util.Motion.reduced) {
+            binding.settingsContainer.animate().cancel()
+            binding.settingsContainer.alpha = 1f
+        } else if (!hadDrawerOpen) {
             binding.settingsContainer.alpha = 0f
-            binding.settingsContainer.animate().alpha(1f).setDuration(com.unix14.minimaltv.util.Motion.duration(240)).start()
+            binding.settingsContainer.animate().alpha(1f).setDuration(240).start()
         } else {
             binding.settingsContainer.alpha = 1f
         }
@@ -216,7 +234,16 @@ class MainActivity : AppCompatActivity() {
 
     fun closeInputsDrawer() {
         val fragment = inputsFragment ?: return
-        binding.settingsContainer.animate().alpha(0f).setDuration(com.unix14.minimaltv.util.Motion.duration(180)).start()
+        if (com.unix14.minimaltv.util.Motion.reduced) {
+            binding.settingsContainer.animate().cancel()
+            supportFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()
+            binding.settingsContainer.visibility = View.GONE
+            binding.settingsContainer.alpha = 1f
+            binding.topBar.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
+            binding.mainBrowseFragment.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
+            return
+        }
+        binding.settingsContainer.animate().alpha(0f).setDuration(180).start()
         fragment.animateClose {
             if (!isFinishing && !isDestroyed) {
                 supportFragmentManager.beginTransaction().remove(fragment).commitAllowingStateLoss()
@@ -347,6 +374,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        if (com.unix14.minimaltv.util.Motion.reduced) {
+            overridePendingTransition(0, 0)
+        }
         val now = android.os.SystemClock.elapsedRealtime()
         if (lastDataRefreshTime == 0L || now - lastDataRefreshTime > 120_000L) {
             lastDataRefreshTime = now
@@ -354,8 +384,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        if (com.unix14.minimaltv.util.Motion.reduced) {
+            overridePendingTransition(0, 0)
+        }
+    }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        if (com.unix14.minimaltv.util.Motion.reduced) {
+            overridePendingTransition(0, 0)
+        }
         setIntent(intent)
         handleHomeButtonPressed()
     }

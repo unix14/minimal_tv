@@ -2,32 +2,50 @@ package com.unix14.minimaltv.util
 
 import android.content.Context
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
+import androidx.preference.PreferenceManager
 
 /**
  * Central switch for the "Reduce animations" performance setting.
  * Stored in plain SharedPreferences (not DataStore) so every animation site can read it synchronously on the UI thread.
- * When enabled, all durations collapse to 0, decorative animations are skipped and card shadows (expensive on low-end TV GPUs) are turned off.
+ * When enabled, all durations collapse to 0, decorative animations are skipped, card shadows are turned off,
+ * and system animation scales (window, transition, animator) are forced to 0.0f.
  */
 object Motion {
 
-    private const val PREFS = "minimal_tv_motion"
-    private const val KEY_REDUCE = "reduce_animations"
+    const val KEY_REDUCE = "reduce_animations"
 
     @Volatile
     var reduced: Boolean = false
         private set
 
     fun init(context: Context) {
-        reduced = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getBoolean(KEY_REDUCE, false)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        reduced = prefs.getBoolean(KEY_REDUCE, false)
+        if (reduced) {
+            applySystemAnimationScale(context, 0.0f)
+        }
     }
 
     fun setReduced(context: Context, value: Boolean) {
         reduced = value
-        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit().putBoolean(KEY_REDUCE, value).apply()
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        prefs.edit().putBoolean(KEY_REDUCE, value).apply()
+        applySystemAnimationScale(context, if (value) 0.0f else 1.0f)
+    }
+
+    fun applySystemAnimationScale(context: Context, scale: Float) {
+        try {
+            Settings.Global.putFloat(context.contentResolver, Settings.Global.WINDOW_ANIMATION_SCALE, scale)
+            Settings.Global.putFloat(context.contentResolver, Settings.Global.TRANSITION_ANIMATION_SCALE, scale)
+            Settings.Global.putFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, scale)
+        } catch (e: Exception) {
+            android.util.Log.w("Motion", "Could not set system animation scale: ${e.message}")
+        }
     }
 
     /** Returns [ms], or 0 when animations are reduced. */
